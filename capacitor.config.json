@@ -1,0 +1,10 @@
+{
+  "appId": "ph.malinaw.reader",
+  "appName": "Malinaw",
+  "webDir": "www",
+  "loggingBehavior": "debug",
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#f7f5ef"
+  }
+}

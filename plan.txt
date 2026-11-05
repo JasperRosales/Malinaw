@@ -1,0 +1,28 @@
+Project Idea: Accessible Reading Assistant
+A web-based reading assistant designed to help people with low vision, reading difficulties, or limited literacy understand written information more easily. It transforms complex documents into accessible content through text-to-speech, simplified explanations, and language support.
+Problem
+Many people face difficulties understanding written information because of visual impairments, reading disabilities, or limited reading proficiency.
+
+Important documents, such as school materials, government announcements, medical instructions, and other written information, may contain complex language that is difficult to understand.
+
+For people with low vision, reading printed documents or small text on screens can also be challenging. These barriers can limit access to education, healthcare information, and essential services.
+How It Works
+1. Upload or Capture Documents
+Users can upload a PDF, take a photo of a printed document, or paste text they want to understand.
+
+2. Extract Text Using OCR
+The system uses optical character recognition (OCR) to convert text from images and scanned documents into readable digital text.
+
+3. Simplify Difficult Content
+AI rewrites complicated passages into simpler language while preserving the original meaning.
+
+4. Listen to the Content
+Text-to-speech allows users to listen to the extracted or simplified text instead of reading it.
+
+5. Translate and Explain
+Users can translate content into Filipino or another supported language and ask questions about difficult words or passages.
+
+6. Customize Accessibility Settings
+Users can adjust font size, contrast, spacing, and reading speed to suit their needs.
+Main Goal
+To make written information more accessible and understandable for people who experience reading barriers, helping them access education, healthcare information, and essential services more independently.

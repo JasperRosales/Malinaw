@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Malinaw turns photos, PDFs, and difficult text into clear, listenable, and translated content.">
+  <meta name="theme-color" content="#0f766e">
+  <title>Malinaw — Accessible Reading Assistant</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <script defer src="js/data.js"></script>
+  <script defer src="js/core.js"></script>
+  <script defer src="js/speech.js"></script>
+  <script defer src="js/ai.js"></script>
+  <script defer src="js/input.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <rect x="2" y="2" width="44" height="44" rx="13" fill="currentColor" opacity=".14"/>
+        <path d="M10 24c4.4-6.6 8.9-9.9 14-9.9S33.6 17.4 38 24c-4.4 6.6-8.9 9.9-14 9.9S14.4 30.6 10 24Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>
+        <circle cx="24" cy="24" r="4.2" fill="currentColor"/>
+        <path d="M35 33.5c1.9 1.2 3.4 2.8 4.5 4.5M39.5 30.5c1.3.7 2.4 1.7 3.2 2.9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+      <div class="brand-text">
+        <span class="brand-name">Malinaw</span>
+        <span class="brand-tag">Accessible Reading Assistant</span>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="installBtn" class="btn btn-ghost" type="button" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Install app
+      </button>
+      <button id="settingsBtn" class="btn btn-ghost" type="button" aria-haspopup="dialog" aria-controls="settingsPanel" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10m4 0h2M4 17h2m4 0h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="7" r="2.4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="17" r="2.4" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        Accessibility
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="eyebrow">Read easier. Understand better.</p>
+      <h1 id="hero-title">Turn any document into clear, listenable text.</h1>
+      <p class="hero-copy">Snap a photo, open a PDF, or paste complicated text. Malinaw reads it out loud, rewrites it in plain language, and translates it — so information is easier to understand.</p>
+      <ul class="chips" aria-label="Features">
+        <li>Photo &amp; PDF scanning</li>
+        <li>Plain-language rewrite</li>
+        <li>Listen out loud</li>
+        <li>Filipino translation</li>
+      </ul>
+    </section>
+
+    <section class="card input-card" aria-labelledby="input-title">
+      <div class="card-head">
+        <div>
+          <span class="step">Step 1</span>
+          <h2 id="input-title">Add something to read</h2>
+        </div>
+        <p class="card-note">Your files stay on your device.</p>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Document source">
+        <button class="tab is-active" type="button" role="tab" id="tab-text" aria-selected="true" aria-controls="panel-text" data-tab="text">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 10h14M5 14h9M5 18h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Paste text
+        </button>
+        <button class="tab" type="button" role="tab" id="tab-image" aria-selected="false" aria-controls="panel-image" data-tab="image" tabindex="-1">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="10" r="1.6" fill="currentColor"/><path d="m5 17 4.5-4 3 2.5L16 11l3 3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Photo / scan
+        </button>
+        <button class="tab" type="button" role="tab" id="tab-pdf" aria-selected="false" aria-controls="panel-pdf" data-tab="pdf" tabindex="-1">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 3v5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 13h6M9 17h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          PDF
+        </button>
+      </div>
+
+      <div id="panel-text" class="tab-panel" role="tabpanel" aria-labelledby="tab-text">
+        <label class="sr-only" for="textInput">Paste text to read</label>
+        <textarea id="textInput" rows="8" placeholder="Paste an article, announcement, school lesson, or medical instruction here…"></textarea>
+        <div class="field-row">
+          <span class="field-hint" id="textCount">0 characters</span>
+          <div class="btn-row">
+            <button id="sampleBtn" class="btn btn-quiet" type="button">Try a sample</button>
+            <button id="clearInputBtn" class="btn btn-quiet" type="button">Clear</button>
+            <button id="processTextBtn" class="btn btn-primary" type="button">Make it readable</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel-image" class="tab-panel" role="tabpanel" aria-labelledby="tab-image" hidden>
+        <div class="dropzone" id="imageDrop" tabindex="0" role="button" aria-label="Choose or drop a photo to scan">
+          <svg class="drop-icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="9" width="38" height="30" rx="5" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="17" cy="19" r="3" fill="currentColor"/><path d="m9 34 9-8 6 5 6-6 9 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <p class="drop-title">Take a photo or choose one</p>
+          <p class="drop-hint">Printed pages, signs, labels, handwritten notes</p>
+          <span class="btn btn-primary">Choose photo</span>
+          <input id="imageInput" type="file" accept="image/*" capture="environment" hidden>
+        </div>
+        <div id="imagePreviewWrap" class="preview" hidden>
+          <img id="imagePreview" alt="Preview of the photo you selected">
+          <div class="preview-meta">
+            <span id="imageName"></span>
+            <button id="removeImageBtn" class="btn btn-quiet btn-sm" type="button">Remove</button>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="inline-fields">
+            <label class="field">
+              <span>Language</span>
+              <select id="ocrLang">
+                <option value="eng">English</option>
+                <option value="fil">Filipino</option>
+                <option value="eng+fil" selected>English + Filipino</option>
+              </select>
+            </label>
+            <label class="check">
+              <input id="enhanceToggle" type="checkbox" checked>
+              <span>Improve scan quality</span>
+            </label>
+          </div>
+          <button id="runOcrBtn" class="btn btn-primary" type="button" disabled>Read photo</button>
+        </div>
+        <div id="ocrProgress" class="progress" hidden>
+          <div class="progress-bar"><span id="ocrProgressBar"></span></div>
+          <p id="ocrProgressText" class="progress-text" role="status">Getting ready…</p>
+        </div>
+      </div>
+
+      <div id="panel-pdf" class="tab-panel" role="tabpanel" aria-labelledby="tab-pdf" hidden>
+        <div class="dropzone" id="pdfDrop" tabindex="0" role="button" aria-label="Choose or drop a PDF">
+          <svg class="drop-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M13 5h14l9 9v27a2 2 0 0 1-2 2H13a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M27 5v9h9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M16 24h16M16 30h16M16 36h10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <p class="drop-title">Drop a PDF here or choose a file</p>
+          <p class="drop-hint">Text PDFs and scanned PDFs are both supported</p>
+          <span class="btn btn-primary">Choose PDF</span>
+          <input id="pdfInput" type="file" accept="application/pdf,.pdf" hidden>
+        </div>
+        <div id="pdfFileWrap" class="file-chip" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 3v5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          <span id="pdfFileName"></span>
+          <span id="pdfPageCount" class="muted"></span>
+          <button id="removePdfBtn" class="btn btn-quiet btn-sm" type="button">Remove</button>
+        </div>
+        <div class="field-row">
+          <div class="inline-fields">
+            <label class="check">
+              <input id="pdfOcrToggle" type="checkbox" checked>
+              <span>Use OCR for scanned pages</span>
+            </label>
+            <label class="field">
+              <span>Scan language</span>
+              <select id="pdfOcrLang">
+                <option value="eng">English</option>
+                <option value="fil">Filipino</option>
+                <option value="eng+fil" selected>English + Filipino</option>
+              </select>
+            </label>
+          </div>
+          <button id="runPdfBtn" class="btn btn-primary" type="button" disabled>Read PDF</button>
+        </div>
+        <div id="pdfProgress" class="progress" hidden>
+          <div class="progress-bar"><span id="pdfProgressBar"></span></div>
+          <p id="pdfProgressText" class="progress-text" role="status">Getting ready…</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="workspace" hidden aria-labelledby="workspace-title">
+      <div class="workspace-head">
+        <div>
+          <span class="step">Step 2</span>
+          <h2 id="workspace-title">Your document</h2>
+          <p class="doc-meta"><span id="docName">Untitled</span> · <span id="docWords">0 words</span></p>
+        </div>
+        <div class="btn-row">
+          <button id="copyBtn" class="btn btn-quiet" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+            Copy
+          </button>
+          <button id="downloadBtn" class="btn btn-quiet" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Save
+          </button>
+          <button id="newDocBtn" class="btn btn-quiet" type="button">New</button>
+        </div>
+      </div>
+
+      <div class="toolbar" role="toolbar" aria-label="Document tools">
+        <button id="simplifyBtn" class="btn btn-primary" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M18.5 15.5 19.4 18l2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9.9-2.5Z" fill="currentColor"/></svg>
+          Simplify
+        </button>
+        <button id="translateBtn" class="btn" type="button" aria-expanded="false" aria-controls="translatePanel">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h9M8.5 5v3c0 3.3-2 6.2-5 7.5M6 9c.7 2.4 2.4 4.4 4.7 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m13 20 3.5-9 3.5 9M14.3 17h4.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Translate
+        </button>
+        <button id="explainBtn" class="btn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.6 9.2a2.5 2.5 0 1 1 3.6 2.3c-.8.4-1.2 1-1.2 1.9v.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg>
+          Explain
+        </button>
+        <button id="askBtn" class="btn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-4 4v-4H6a2 2 0 0 1-2-2V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Ask
+        </button>
+        <button id="listenBtn" class="btn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 4V6L8 10H5Z" fill="currentColor"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Listen
+        </button>
+        <div class="readability" id="readabilityBadge" aria-live="polite" hidden>
+          <span class="readability-label">Reading ease</span>
+          <span class="readability-value" id="readabilityValue">—</span>
+          <span class="readability-hint" id="readabilityHint"></span>
+        </div>
+      </div>
+
+      <div id="translatePanel" class="translate-panel" hidden>
+        <div class="inline-fields">
+          <label class="field">
+            <span>From</span>
+            <select id="sourceLang">
+              <option value="en" selected>English</option>
+              <option value="tl">Filipino</option>
+              <option value="es">Spanish</option>
+              <option value="ceb">Cebuano</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>To</span>
+            <select id="targetLang">
+              <option value="tl" selected>Filipino</option>
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="ceb">Cebuano</option>
+            </select>
+          </label>
+          <label class="field field-grow">
+            <span>Text to translate</span>
+            <select id="translateSource">
+              <option value="simplified" selected>Simplified version</option>
+              <option value="original">Original text</option>
+            </select>
+          </label>
+          <button id="runTranslateBtn" class="btn btn-primary" type="button">Translate</button>
+        </div>
+        <p class="field-hint">Translation uses a free public service and needs an internet connection.</p>
+      </div>
+
+      <div class="panes">
+        <article class="card pane" aria-labelledby="original-title">
+          <div class="pane-head">
+            <h3 id="original-title">Original</h3>
+            <div class="pane-head-actions">
+              <span class="pane-stat" id="originalStat">0 words</span>
+              <button id="listenOriginalBtn" class="pane-listen" type="button" aria-label="Listen to the original text">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 4V6L8 10H5Z" fill="currentColor"/><path d="M16 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                Listen
+              </button>
+            </div>
+          </div>
+          <div id="originalText" class="text-display" tabindex="0" data-label="original">
+            <p class="placeholder-text">Your text will appear here.</p>
+          </div>
+        </article>
+
+        <article class="card pane pane-main" aria-labelledby="main-title">
+          <div class="pane-head">
+            <h3 id="main-title">Accessible version</h3>
+            <span class="pane-stat" id="mainStat">0 words</span>
+          </div>
+          <div id="mainText" class="text-display" tabindex="0" data-label="simplified">
+            <p class="placeholder-text">Choose <strong>Simplify</strong> to rewrite this in plain language.</p>
+          </div>
+          <p class="tap-hint">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V6.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5A5.5 5.5 0 0 1 12.5 20H12a5 5 0 0 1-4-2l-3-4a1.5 1.5 0 0 1 2.4-1.8L9 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Tap any word to see its meaning.
+          </p>
+        </article>
+
+        <article class="card pane" id="translationCard" aria-labelledby="translation-title" hidden>
+          <div class="pane-head">
+            <h3 id="translation-title">Translation</h3>
+            <div class="pane-head-actions">
+              <span class="pane-stat" id="translationStat"></span>
+              <button id="listenTranslationBtn" class="pane-listen" type="button" aria-label="Listen to the translation">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10v4h3l4 4V6L8 10H5Z" fill="currentColor"/><path d="M16 9a4 4 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                Listen
+              </button>
+            </div>
+          </div>
+          <div id="translationText" class="text-display" tabindex="0" data-label="translation">
+            <p class="placeholder-text">Your translation will appear here.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="player" id="player" hidden aria-label="Read aloud controls">
+    <div class="player-main">
+      <button id="playPauseBtn" class="player-btn player-btn-main" type="button" aria-label="Play">
+        <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5Z" fill="currentColor"/></svg>
+        <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M8 5h3v14H8V5Zm5 0h3v14h-3V5Z" fill="currentColor"/></svg>
+      </button>
+      <div class="player-info">
+        <span class="player-label" id="playerLabel">Ready to read</span>
+        <span class="player-snippet" id="playerSnippet">Press play to listen</span>
+      </div>
+      <button id="stopBtn" class="player-btn" type="button" aria-label="Stop reading">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>
+      </button>
+    </div>
+    <div class="player-controls">
+      <label class="player-range">
+        <span>Speed <strong id="speedValue">1×</strong></span>
+        <input id="speedRange" type="range" min="0.5" max="2" step="0.1" value="1" aria-label="Reading speed">
+      </label>
+      <label class="player-select">
+        <span class="sr-only">Voice</span>
+        <select id="voiceSelect" aria-label="Reading voice">
+          <option value="">Default voice</option>
+        </select>
+      </label>
+      <button id="closePlayerBtn" class="player-btn" type="button" aria-label="Close player">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="scrim" class="scrim" hidden></div>
+
+  <aside id="settingsPanel" class="drawer" role="dialog" aria-modal="true" aria-labelledby="settings-title" aria-hidden="true">
+    <div class="drawer-head">
+      <div>
+        <span class="step">Make it yours</span>
+        <h2 id="settings-title">Accessibility settings</h2>
+      </div>
+      <button id="closeSettingsBtn" class="icon-btn" type="button" aria-label="Close settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <fieldset class="setting-group">
+        <legend>Theme</legend>
+        <div class="theme-grid">
+          <button class="theme-swatch" data-theme-choice="light" type="button" aria-pressed="true">
+            <span class="swatch swatch-light"></span>
+            <span>Light</span>
+          </button>
+          <button class="theme-swatch" data-theme-choice="cream" type="button" aria-pressed="false">
+            <span class="swatch swatch-cream"></span>
+            <span>Cream</span>
+          </button>
+          <button class="theme-swatch" data-theme-choice="dark" type="button" aria-pressed="false">
+            <span class="swatch swatch-dark"></span>
+            <span>Dark</span>
+          </button>
+          <button class="theme-swatch" data-theme-choice="contrast" type="button" aria-pressed="false">
+            <span class="swatch swatch-contrast"></span>
+            <span>High contrast</span>
+          </button>
+        </div>
+      </fieldset>
+
+      <div class="setting-group">
+        <label class="setting-range" for="fontSizeRange">
+          <span>Text size <strong id="fontSizeValue">22 px</strong></span>
+          <input id="fontSizeRange" type="range" min="16" max="40" step="1" value="22">
+        </label>
+        <label class="setting-range" for="lineHeightRange">
+          <span>Line spacing <strong id="lineHeightValue">1.6</strong></span>
+          <input id="lineHeightRange" type="range" min="1.2" max="2.4" step="0.1" value="1.6">
+        </label>
+        <label class="setting-range" for="letterSpacingRange">
+          <span>Letter spacing <strong id="letterSpacingValue">Normal</strong></span>
+          <input id="letterSpacingRange" type="range" min="0" max="0.16" step="0.01" value="0">
+        </label>
+        <label class="setting-range" for="rateRange">
+          <span>Reading speed <strong id="rateValue">1×</strong></span>
+          <input id="rateRange" type="range" min="0.5" max="2" step="0.1" value="1">
+        </label>
+      </div>
+
+      <div class="setting-group">
+        <label class="toggle-row">
+          <span>
+            <strong>Legible font</strong>
+            <small>Use a typeface designed for low vision.</small>
+          </span>
+          <input id="legibleFontToggle" type="checkbox" checked>
+        </label>
+        <label class="toggle-row">
+          <span>
+            <strong>Highlight simplified words</strong>
+            <small>Mark words that were replaced with simpler ones.</small>
+          </span>
+          <input id="highlightChangesToggle" type="checkbox" checked>
+        </label>
+        <label class="toggle-row">
+          <span>
+            <strong>Highlight while reading</strong>
+            <small>Follow along as each word is spoken.</small>
+          </span>
+          <input id="highlightReadToggle" type="checkbox" checked>
+        </label>
+        <label class="toggle-row">
+          <span>
+            <strong>Reduce motion</strong>
+            <small>Turn off smooth scrolling and animations.</small>
+          </span>
+          <input id="reduceMotionToggle" type="checkbox">
+        </label>
+      </div>
+
+      <fieldset class="setting-group ai-group">
+        <legend>AI assist (optional)</legend>
+        <p class="field-hint">Add a Google Gemini API key for smarter rewriting and answers. Without a key, Malinaw uses its built-in plain-language tools.</p>
+        <label class="field">
+          <span>Gemini API key</span>
+          <input id="aiKeyInput" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your key">
+        </label>
+        <label class="field">
+          <span>Model</span>
+          <input id="aiModelInput" type="text" autocomplete="off" spellcheck="false" placeholder="gemini-2.0-flash">
+        </label>
+        <div class="btn-row">
+          <button id="testAiBtn" class="btn btn-quiet btn-sm" type="button">Test connection</button>
+          <button id="clearAiBtn" class="btn btn-quiet btn-sm" type="button">Clear key</button>
+        </div>
+        <p class="field-hint">The key is stored only in this browser. For a public deployment, use a small server-side proxy instead.</p>
+      </fieldset>
+
+      <button id="resetSettingsBtn" class="btn btn-quiet btn-block" type="button">Reset to defaults</button>
+      <p class="drawer-foot">Settings are saved on this device.</p>
+    </div>
+  </aside>
+
+  <dialog id="explainDialog" class="dialog" aria-labelledby="explain-title">
+    <div class="dialog-head">
+      <div>
+        <span class="step">Word helper</span>
+        <h2 id="explain-title">What does it mean?</h2>
+      </div>
+      <button class="icon-btn dialog-close" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="explainBody" class="dialog-body">
+      <p class="dialog-placeholder">Tap a word in the document to see a simple explanation.</p>
+    </div>
+    <div class="dialog-actions">
+      <button id="speakExplainBtn" class="btn btn-quiet" type="button" hidden>Listen</button>
+      <button class="btn btn-primary dialog-close" type="button">Done</button>
+    </div>
+  </dialog>
+
+  <dialog id="askDialog" class="dialog" aria-labelledby="ask-title">
+    <div class="dialog-head">
+      <div>
+        <span class="step">Ask about this document</span>
+        <h2 id="ask-title">Questions? Ask away.</h2>
+      </div>
+      <button class="icon-btn dialog-close" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="dialog-body">
+      <label class="field">
+        <span>Your question</span>
+        <textarea id="askInput" rows="3" placeholder="Example: What do I need to bring to the appointment?"></textarea>
+      </label>
+      <div class="btn-row">
+        <button id="askSubmitBtn" class="btn btn-primary" type="button">Get an answer</button>
+      </div>
+      <div id="askAnswer" class="answer" hidden></div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="srStatus" class="sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>

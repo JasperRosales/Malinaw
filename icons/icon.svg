@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Malinaw logo">
+  <rect width="512" height="512" rx="116" fill="#0f766e"/>
+  <path d="M92 256c48-72 108-108 164-108s116 36 164 108c-48 72-108 108-164 108S140 328 92 256Z" fill="#ffffff"/>
+  <circle cx="256" cy="256" r="62" fill="#0f766e"/>
+  <circle cx="278" cy="234" r="18" fill="#ffffff"/>
+  <path d="M372 330c22 14 39 34 50 58" fill="none" stroke="#ffffff" stroke-width="22" stroke-linecap="round" opacity=".9"/>
+  <path d="M418 300c20 10 36 25 48 44" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" opacity=".65"/>
+  <path d="M100 388h136" stroke="#ffffff" stroke-width="20" stroke-linecap="round" opacity=".35"/>
+</svg>
