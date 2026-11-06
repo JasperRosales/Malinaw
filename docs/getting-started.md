@@ -58,3 +58,6 @@ The APK is written to `android/app/build/outputs/apk/debug/`.
 | `sync:android` | Copy assets and sync the Capacitor Android project |
 | `open:android` | Copy assets and open Android Studio |
 | `apk` | Copy, sync, and build a debug APK (Windows) |
+
+For a full walkthrough of local dev and the Android app, see
+[Usage: Dev & App](usage.md).

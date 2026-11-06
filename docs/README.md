@@ -11,6 +11,7 @@ It ships as a Progressive Web App (PWA) and as an Android app via Capacitor.
 | Doc | What it covers |
 | --- | --- |
 | [Getting Started](getting-started.md) | Install, run locally, build the APK |
+| [Usage: Dev & App](usage.md) | Step-by-step for local dev and the Android app |
 | [User Guide](user-guide.md) | How to use every feature |
 | [Architecture](architecture.md) | File layout, modules, data flow |
 | [Features](features.md) | How OCR, simplify, TTS, translate, explain, and Q&A work |
